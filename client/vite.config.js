@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://genai-project-65m3.onrender.com',
         changeOrigin: true,
       },
     },
