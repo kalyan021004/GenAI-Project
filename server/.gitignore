@@ -1,3 +1,18 @@
 .env
-server/node_modules/
 
+
+# Node modules (all)
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# Build folders
+dist/
+build/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
