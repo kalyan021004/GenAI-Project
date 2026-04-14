@@ -5,7 +5,7 @@ const { connectDB } = require('./config/db');
 
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'https://gen-ai-project-sigma-seven.vercel.app' }));
 app.use(express.json());
 
 // Routes (added per phase)
