@@ -7,10 +7,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://gen-ai-project-n545.vercel.app",
+    origin: [
+      "http://localhost:5173",
+      "https://gen-ai-project-n545.vercel.app",
+    ],
     credentials: true,
   })
-);app.use(express.json());
+);
+app.use(express.json());
 
 // Routes (added per phase)
 app.use('/api/sites', require('./routes/siteRoutes'));
