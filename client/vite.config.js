@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://genai-project-65m3.onrender.com',
+        target: 'https://gen-ai-project-n545.vercel.app/',
         changeOrigin: true,
       },
     },

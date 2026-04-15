@@ -27,7 +27,7 @@ export function LoginPage() {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/auth/login",
+        "https://gen-ai-project-n545.vercel.app/api/auth/login",
         {
           method: "POST",
           headers: {
@@ -174,7 +174,7 @@ export function RegisterPage() {
       setLoading(true);
 
       const res = await fetch(
-        "https://genai-project-65m3.onrender.com/api/auth/register",
+        "https://gen-ai-project-n545.vercel.app//api/auth/register",
         {
           method: "POST",
           headers: {
@@ -310,22 +310,24 @@ export function RegisterPage() {
 const styles = {
 
   container: {
-  height: "100vh",
-  width: "100%",
+    height: "100vh",
+    width: "100vw",
 
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+    overflow: "hidden",
 
-  overflow: "hidden",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
 
-  backgroundImage:
-    'url("https://images.unsplash.com/photo-1601823984263-b87b59798b70")',
+    /* FULL IMAGE BACKGROUND */
 
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat"
-},
+    backgroundImage:
+      'url("https://images.unsplash.com/photo-1601823984263-b87b59798b70")',
+
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat"
+  },
 
   form: {
     width: "340px",
