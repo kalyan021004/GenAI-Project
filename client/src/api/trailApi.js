@@ -1,4 +1,13 @@
-import axios from 'axios';
+// src/api/trailApi.js
+
+import api from "./baseApi";
+
+/*
+   Trail API
+   Uses centralized base URL
+*/
 
 export const generateTrail = (form) =>
-  axios.post('/api/trail/generate', form).then(r => r.data);
+  api
+    .post("/api/trail/generate", form)
+    .then((r) => r.data);
