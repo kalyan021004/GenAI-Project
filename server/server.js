@@ -11,7 +11,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://gen-ai-project-n545.vercel.app",
-      "https://gen-ai-project-h3hs.vercel.app/"
+      "https://gen-ai-project-h3hs.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
