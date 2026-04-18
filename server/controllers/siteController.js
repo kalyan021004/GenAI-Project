@@ -73,29 +73,35 @@ const generateSite = async (req, res) => {
   try {
     const { place_name } = req.body;
 
-
     if (!place_name) {
       return res.status(400).json({
         error: "place_name required"
       });
     }
 
-    // Check DB first
-    const existing = await Site.findOne({
-      name: new RegExp(place_name, "i")
-    });
+    /* CREATE SLUG */
+
+    const slug = place_name
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+    console.log("Slug:", slug);
+
+    /* FIRST CHECK — RETURN EXISTING */
+
+    let existing = await Site.findOne({ slug });
 
     if (existing) {
-      console.log("Found in DB");
+      console.log("Returning existing site");
       return res.json(existing);
     }
 
+    /* GENERATE AI DATA */
 
     const raw = await chatCompletion(
       GENERATE_SYSTEM,
       `Generate heritage profile for: ${place_name}`
     );
-
 
     let siteData;
 
@@ -105,40 +111,79 @@ const generateSite = async (req, res) => {
         .trim();
 
       siteData = JSON.parse(cleaned);
+
     } catch (err) {
-      console.error("JSON parse failed");
       return res.status(500).json({
-        error: "AI returned invalid JSON",
-        raw
+        error: "AI returned invalid JSON"
       });
     }
 
-    console.log("Generating images...");
+    /* FORCE REQUIRED FIELDS */
+
+    siteData.name = place_name;
+    siteData.slug = slug;
+
+    /* FIX virtual_tour_links FORMAT */
+
+    if (!Array.isArray(siteData.virtual_tour_links)) {
+      if (typeof siteData.virtual_tour_links === "string") {
+        siteData.virtual_tour_links = [
+          {
+            url: siteData.virtual_tour_links,
+            type: "maps",
+            label: "Virtual Tour"
+          }
+        ];
+      } else {
+        siteData.virtual_tour_links = [];
+      }
+    }
+
+    /* GENERATE IMAGES */
 
     let images = [];
 
     try {
       images = await generateImages(place_name);
-    } catch (err) {
+    } catch {
       console.log("Image generation failed");
     }
 
     siteData.images = images || [];
 
-    console.log("Saving to MongoDB...");
+    console.log("Saving site...");
 
     const site = await Site.create(siteData);
 
     console.log("Saved successfully");
 
-    res.json(site);
+    return res.json(site);
 
   } catch (err) {
+
+    /* SECOND SAFETY — HANDLE DUPLICATE */
+
+    if (err.code === 11000) {
+
+      console.log("Duplicate detected — returning existing");
+
+      const slug =
+        req.body.place_name
+          .toLowerCase()
+          .replace(/\s+/g, "-");
+
+      const existing =
+        await Site.findOne({ slug });
+
+      return res.json(existing);
+    }
+
     console.error("SERVER ERROR:", err);
 
     res.status(500).json({
       error: err.message
     });
+
   }
 };
 const getSiteSection = async (req, res) => {
